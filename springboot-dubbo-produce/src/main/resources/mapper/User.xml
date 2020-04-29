@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sergei.mapper.UserMapper">
+
+	<cache type="com.sergei.config.RedisCache"/>
+
+	<cache type="com.sergei.config.RedisCache">
+		<property name="eviction" value="LRU" />
+		<property name="flushInterval" value="6000000" />
+		<property name="size" value="1024" />
+		<property name="readOnly" value="false" />
+	</cache>
+
+	<insert id="insertUser" parameterType="com.sergei.entity.User" useGeneratedKeys="true" keyProperty="id" >
+		<selectKey keyProperty="id" order="AFTER" resultType="Long">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into user(user_name,email) values(#{user_name},#{email})
+	</insert>
+
+	<select id="selectAll"  resultType="com.sergei.entity.User">
+		select * from user
+	</select>
+
+	<select id="findByUser"  resultMap="userAddress1">
+		select * from user where id = #{id}
+	</select>
+
+	<resultMap id="userAddress1" type="com.sergei.entity.User">
+		<id property="id" column="id"/>
+		<result property="userName" column="user_name"/>
+		<result property="email" column="email"/>
+		<!--<association property="userAddress" select="com.sergei.mapper.UserAddressMapper.findByUser"-->
+					 <!--column="id" fetchType="eager"/>-->
+	</resultMap>
+	<!--//,us.id usid,us.number,us.address   u.id = us.u_id and ,userAddress us-->
+
+	<update id="updateUser" flushCache="true">
+		update user u set u.email=#{email} where u.id=#{id}
+	</update>
+
+	<select id="selectOne" resultType="com.sergei.entity.User">
+		select * from user u where u.user_name=#{userName} and pass_word=#{passWord}
+	</select>
+
+
+	<select id="selectByUserName" resultType="com.sergei.entity.User" useCache="false">
+		select * from user u where u.user_name=#{userName}
+	</select>
+</mapper>

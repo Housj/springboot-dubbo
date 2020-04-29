@@ -1,0 +1,14 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<h2>用户登录</h2>
+<div>
+    <span th:text="${msg}"></span>
+    <form action="#" th:action="@{/user/login}" th:object="${user}" method="post">
+        <input type="text" th:field="*{userName}" />
+        <input type="text" th:field="*{passWord}" />
+        <input type="submit" />
+    </form>
+</div>
+</body>
+</html>

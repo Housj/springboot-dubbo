@@ -1,0 +1,89 @@
+dubbo:
+  application:
+    name: springboot-dubbo-produce
+
+  registry:
+    protocol: zookeeper
+    address: 127.0.0.1:2181
+
+  monitor:
+    protocol: register
+
+  protocol:
+#    serialization: kyro
+    name: dubbo
+    port: 20883
+
+server:
+  port: 8081
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/securiry?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=UTC&useAffectedRows=true
+    username: root
+    password: sergei
+    platform: mysql
+
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 1
+    minIdle: 3
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall,slf4j
+    # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+
+  redis:
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        max-wait: 5000
+        min-idle: 0
+    port: 6379
+    host: 127.0.0.1
+    database: 0
+    timeout: 5000
+
+#      sentinel:
+#        master: mymaster
+#        nodes: 127.0.0.1:6379
+
+mybatis:
+  configuration:
+    cache-enabled: true
+    mapUnderscoreToCamelCase: true
+  type-aliases-package: com.sergei.entity
+  mapper-locations: classpath:/mapper/*
+
+
+logging:
+  level:
+    com.sergei.mapper: debug  #mybatis开启sql日志
+
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  page-size-zero: true
+  params: count = countSql
+
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: 0
+      db-type: mysql
+  mapper-locations: classpath:/mapper/*
+  type-aliases-package: com.sergei.entity
+  configuration:
+    map-underscore-to-camel-case: true

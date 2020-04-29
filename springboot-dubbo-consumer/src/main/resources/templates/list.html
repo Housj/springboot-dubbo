@@ -1,0 +1,28 @@
+<html xmlns:th="http://www.thymeleaf.org" >
+<html xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<body>
+
+<h2>用户列表</h2>
+<div>
+    <span th:text="*{session.user} == null?'用户未登录':*{session.user.userName}">在线</span>
+    <p shiro:hasRole="admin">admin角色</p>
+    <p shiro:hasRole="role">role角色</p>
+    <p shiro:hasRole="user">user角色</p>
+    <ul>
+        <li  th:each="user:${users}">
+            <span th:text="${user.id}"></span>
+            <span th:text="${user.userName}"></span>
+            <span th:text="${user.email}"></span>
+            <a th:href="@{'/user/update?id='+${user.id}}">修改</a>
+            <a th:href="@{'/user/delete?id='+${user.id}}">删除</a>
+            <p shiro:hasPermission="ADMIN:USER:UPDATA">UPDATA权限</p>
+            <p shiro:hasPermission="ADMIN:USER:DELETE">DELETE权限</p>
+            <p shiro:hasPermission="user:add">INSERT权限</p>
+            <p shiro:hasPermission="list:view">SELECT权限</p>
+        </li>
+        <!--共<span th:text="${total}">条</span>-->
+        <!--共<span th:text="${pages}">页</span>-->
+    </ul>
+</div>
+</body>
+</html>

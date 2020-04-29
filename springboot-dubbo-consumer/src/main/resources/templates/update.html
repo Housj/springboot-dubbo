@@ -1,0 +1,14 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<h2>用户修改</h2>
+<div>
+    <form action="#" th:action="@{/user/updateSave}" th:object="${user}" method="post">
+        <input type="text" th:field="*{userName}" readonly="readonly" />
+        <input type="email" th:field="*{email}" />
+        <input type="hidden" th:field="*{id}"  />
+        <input type="submit" />
+    </form>
+</div>
+</body>
+</html>
